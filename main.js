@@ -24,6 +24,14 @@
 //     console.log(key)
 // }
 
+// Company (enumerable, writable, property)
+// Specialty (enumerable, writable, property)
+// Name (enumerable, property)
+// Portfolio (non-enumerable, property) - Should display the stocks the advisor currently holds
+// Worth (non-enumerable, method)
+// Purchase (non-enumerable, method) - This method takes a stock ticker symbol, a quantity, and a price as arguments
+// Sell (non-enumerable, method) - This method takes a stock ticker symbol, a quantity, and a price as arguments
+
 const financialAdvisor = Object.create(null, {
     company: {
         enumerable: true,
@@ -41,16 +49,50 @@ const financialAdvisor = Object.create(null, {
     },
     portfolio: {
         enumerable: false,
-        value: [{ticker: "ABC", 
+        value: [{ticker: "FIRST-STOCK", 
                 share: 30, 
                 price: 25,
-                transactionType: "Start Stock"}]
+                purchase: true}]
     },
     worth: {
         enumerable: false,
         value: function () {
-            // When you invoke the worth() method, it should look at every transaction and calculate the advisor's net worth.
-            
+//____________________USING A FOR LOOP_________________________
+            // let grandTotal = 0;
+            // // When you invoke the worth() method, it should look at every transaction and calculate the advisor's net worth.
+            // for(let i = 0; i < financialAdvisor.portfolio.length; i++){
+            //     let total = financialAdvisor.portfolio[i].share * financialAdvisor.portfolio[i].price
+            //     console.log("total", total)
+            //     if (financialAdvisor.portfolio[i].purchase === true){
+            //        grandTotal = grandTotal + total 
+            //     } else {
+            //         grandTotal = grandTotal - total
+            //     }
+            // }console.log("grand total", grandTotal)
+//__________________________________USING THE 'FOR EACH' LOOP WITH FUNCTION INSIDE___________________
+            // let grandTotal = 0;
+            // financialAdvisor.portfolio.forEach(function(key){
+            //     console.log("key", key)
+            //     let total = key.share * key.price
+            //     if (key.purchase === true){
+            //        grandTotal = grandTotal + total 
+            //     } else {
+            //         grandTotal = grandTotal - total
+            //     }
+            // })
+            // console.log("grand total", grandTotal)
+//__________________________________USING THE 'FOR EACH' LOOP WITH FUNCTION OUTSIDE___________________
+            let grandTotal = 0;
+            let getNetWorth = function (key){
+                let total = key.share * key.price
+                if (key.purchase === true){
+                    grandTotal = grandTotal + total 
+                } else {
+                    grandTotal = grandTotal - total
+                }
+            }
+            financialAdvisor.portfolio.forEach(getNetWorth)
+            console.log("grand total", grandTotal)   
         }
     },
     purchase: {
@@ -60,7 +102,7 @@ const financialAdvisor = Object.create(null, {
                 ticker: symbol,
                 share: quantity,
                 price: purchasePrice,
-                transactionType: "Buy"
+                purchase: true
             }
             financialAdvisor.portfolio.push(newPurchase)
             console.log("new purchase in purchase", newPurchase)
@@ -73,7 +115,7 @@ const financialAdvisor = Object.create(null, {
                 ticker: symbol,
                 share: quantity,
                 price: sellPrice,
-                transactionType: "Sell"
+                purchase: false
             }
             financialAdvisor.portfolio.push(sellStock)
             console.log("sell stock in sell function", sellStock)
@@ -82,20 +124,20 @@ const financialAdvisor = Object.create(null, {
 })
 
 //this calls the "newPurchase" function
-financialAdvisor.purchase("ASD", 55, 77)
+financialAdvisor.purchase("ORANGE", 10, 30)
+financialAdvisor.purchase("APPLE", 20, 40)
 
 //this calls the "sellStock" function
-financialAdvisor.sell("UHS", 98, 100)
+financialAdvisor.sell("CHERRY", 10, 20)
+financialAdvisor.sell("PEACH", 20, 30)
+
+financialAdvisor.worth()
 
 
 
 
-console.log("this is it", financialAdvisor.portfolio)
+console.log("whole portfolio", financialAdvisor.portfolio)
 
-// Company (enumerable, writable, property)
-// Specialty (enumerable, writable, property)
-// Name (enumerable, property)
-// Portfolio (non-enumerable, property) - Should display the stocks the advisor currently holds
-// Worth (non-enumerable, method)
-// Purchase (non-enumerable, method) - This method takes a stock ticker symbol, a quantity, and a price as arguments
-// Sell (non-enumerable, method) - This method takes a stock ticker symbol, a quantity, and a price as arguments
+
+
+
